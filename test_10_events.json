@@ -1,0 +1,12 @@
+[
+{"eventId":"E-1","eventTime":"2026-01-12T13:00:00.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-001","durationMs":1000,"defectCount":0},
+{"eventId":"E-2","eventTime":"2026-01-12T13:00:01.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-002","durationMs":1500,"defectCount":1},
+{"eventId":"E-3","eventTime":"2026-01-12T13:00:02.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-003","durationMs":2000,"defectCount":0},
+{"eventId":"E-4","eventTime":"2026-01-12T13:00:03.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-001","durationMs":1200,"defectCount":2},
+{"eventId":"E-5","eventTime":"2026-01-12T13:00:04.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-002","durationMs":800,"defectCount":0},
+{"eventId":"E-6","eventTime":"2026-01-12T13:00:05.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-003","durationMs":3000,"defectCount":1},
+{"eventId":"E-7","eventTime":"2026-01-12T13:00:06.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-001","durationMs":1800,"defectCount":0},
+{"eventId":"E-8","eventTime":"2026-01-12T13:00:07.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-002","durationMs":2200,"defectCount":3},
+{"eventId":"E-9","eventTime":"2026-01-12T13:00:08.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-003","durationMs":900,"defectCount":0},
+{"eventId":"E-10","eventTime":"2026-01-12T13:00:09.000Z","receivedTime":"2026-01-12T14:58:00.000Z","machineId":"M-001","durationMs":2500,"defectCount":1}
+]

@@ -1,0 +1,11 @@
+com\industrial\eventanalytics\dto\BatchResponse$RejectionDetail.class
+com\industrial\eventanalytics\EventAnalyticsApplication.class
+com\industrial\eventanalytics\dto\TopDefectLineResponse.class
+com\industrial\eventanalytics\dto\BatchResponse.class
+com\industrial\eventanalytics\dto\EventRequest.class
+com\industrial\eventanalytics\service\EventService.class
+com\industrial\eventanalytics\repository\EventRepository.class
+com\industrial\eventanalytics\service\StatsService.class
+com\industrial\eventanalytics\controller\EventController.class
+com\industrial\eventanalytics\dto\StatsResponse.class
+com\industrial\eventanalytics\model\Event.class

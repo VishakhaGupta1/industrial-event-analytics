@@ -1,0 +1,10 @@
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\dto\BatchResponse.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\dto\EventRequest.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\repository\EventRepository.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\model\Event.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\service\EventService.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\dto\StatsResponse.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\service\StatsService.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\controller\EventController.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\EventAnalyticsApplication.java
+C:\Users\Vishakha\OneDrive\Desktop\Industrial Event Ingestion & Analytics Service\src\main\java\com\industrial\eventanalytics\dto\TopDefectLineResponse.java
