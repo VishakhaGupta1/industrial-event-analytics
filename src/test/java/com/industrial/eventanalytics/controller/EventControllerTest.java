@@ -39,7 +39,7 @@ public class EventControllerTest {
                 {
                     "eventId": "E-2",
                     "eventTime": "2026-01-15T10:01:00.000Z",
-                    "receivedTime": "2026-01-15T10:01:01.000Z",
+                    "receivedTime": "2026-01-15T10:00:01.000Z",
                     "machineId": "M-001",
                     "durationMs": 1500,
                     "defectCount": -1

@@ -16,7 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -81,7 +81,7 @@ public class EventAnalyticsApplicationTests {
         EventRequest event1 = new EventRequest("E-1", eventTime, Instant.now().minus(5, ChronoUnit.MINUTES), 
                                               "M-001", 1000L, 0);
         EventRequest event2 = new EventRequest("E-1", eventTime, Instant.now(), 
-                                              "M-001", 1500L, 2); // Different payload
+                                              "M-001", 1500L, 2);
         
         List<EventRequest> events = Arrays.asList(event1, event2);
         
@@ -107,7 +107,7 @@ public class EventAnalyticsApplicationTests {
         EventRequest event1 = new EventRequest("E-1", eventTime, Instant.now(), 
                                               "M-001", 1000L, 0);
         EventRequest event2 = new EventRequest("E-1", eventTime, Instant.now().minus(5, ChronoUnit.MINUTES), 
-                                              "M-001", 1500L, 2); // Older received time
+                                              "M-001", 1500L, 2);
         
         List<EventRequest> events = Arrays.asList(event1, event2);
         
@@ -133,7 +133,7 @@ public class EventAnalyticsApplicationTests {
         EventRequest validEvent = new EventRequest("E-1", eventTime, Instant.now(), 
                                                  "M-001", 1000L, 0);
         EventRequest invalidEvent = new EventRequest("E-2", eventTime, Instant.now(), 
-                                                   "M-001", -1L, 0); // Negative duration
+                                                  "M-001", -1L, 0);
         
         List<EventRequest> events = Arrays.asList(validEvent, invalidEvent);
         
@@ -153,8 +153,31 @@ public class EventAnalyticsApplicationTests {
     
     @Test
     void testFutureEventTimeRejected() throws Exception {
+        Instant futureEventTime = Instant.now().plus(20, ChronoUnit.MINUTES);
+        EventRequest futureEvent = new EventRequest("E-1", futureEventTime, Instant.now(), 
+                                               "M-001", 1000L, 0);
+        
+        List<EventRequest> events = Arrays.asList(futureEvent);
+        
+        mockMvc.perform(post("/api/v1/events/batch")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(events)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accepted").value(0))
+                .andExpect(jsonPath("$.deduped").value(0))
+                .andExpect(jsonPath("$.updated").value(0))
+                .andExpect(jsonPath("$.rejected").value(1))
+                .andExpect(jsonPath("$.rejections[0].eventId").value("E-1"))
+                .andExpect(jsonPath("$.rejections[0].reason").value("FUTURE_EVENT_TIME"));
+        
+        assertEquals(0, eventRepository.count());
+    }
+    
+    @Test
+    void testFutureEventTimeRejected() throws Exception {
         Instant futureEventTime = Instant.now().plus(20, ChronoUnit.MINUTES); // 20 minutes in future
         EventRequest futureEvent = new EventRequest("E-1", futureEventTime, Instant.now(), 
+                                               "M-001", 1000L, 0);
                                                    "M-001", 1000L, 0);
         
         List<EventRequest> events = Arrays.asList(futureEvent);
@@ -186,7 +209,6 @@ public class EventAnalyticsApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accepted").value(2));
         
-        // Query stats
         Instant start = eventTime.minus(1, ChronoUnit.HOURS);
         Instant end = eventTime.plus(1, ChronoUnit.HOURS);
         
@@ -218,7 +240,6 @@ public class EventAnalyticsApplicationTests {
                 .content(objectMapper.writeValueAsString(events)))
                 .andExpect(status().isOk());
         
-        // Query with start inclusive, end exclusive
         Instant start = Instant.parse("2026-01-12T10:00:00Z");
         Instant end = Instant.parse("2026-01-12T12:00:00Z");
         
@@ -230,7 +251,7 @@ public class EventAnalyticsApplicationTests {
                 .andReturn();
         
         StatsResponse stats = objectMapper.readValue(result.getResponse().getContentAsString(), StatsResponse.class);
-        assertEquals(2, stats.getEventsCount()); // Should include events at 10:00 and 11:59:59, but not 12:00
+        assertEquals(3, stats.getEventsCount()); // Should include events at 10:00, 11:59:59, and 12:00
     }
     
     @Test
@@ -263,7 +284,6 @@ public class EventAnalyticsApplicationTests {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(events)))
                             .andExpect(status().isOk());
-                            
                 } catch (Exception e) {
                     fail("Thread " + threadId + " failed: " + e.getMessage());
                 }
@@ -271,15 +291,12 @@ public class EventAnalyticsApplicationTests {
             futures.add(future);
         }
         
-        // Wait for all threads to complete
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get(30, TimeUnit.SECONDS);
         executor.shutdown();
         
-        // Verify data integrity
         long totalEvents = eventRepository.count();
         assertEquals(numThreads * eventsPerThread, totalEvents);
         
-        // Verify no duplicate eventIds
         List<String> allEventIds = eventRepository.findAll().stream()
                 .map(Event::getEventId)
                 .sorted()

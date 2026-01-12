@@ -18,17 +18,13 @@ public class StatsService {
     private EventRepository eventRepository;
     
     public StatsResponse getMachineStats(String machineId, Instant start, Instant end) {
-        // Get event count
         long eventsCount = eventRepository.countEventsByMachineAndTimeWindow(machineId, start, end);
         
-        // Get defect count (ignoring defectCount = -1)
         Long defectsCountObj = eventRepository.sumDefectsByMachineAndTimeWindow(machineId, start, end);
         long defectsCount = defectsCountObj != null ? defectsCountObj : 0;
         
-        // Calculate average defect rate (defects per hour)
         double avgDefectRate = calculateAvgDefectRate(defectsCount, start, end);
         
-        // Determine status
         String status = avgDefectRate < 2.0 ? "Healthy" : "Warning";
         
         return new StatsResponse(machineId, start, end, eventsCount, defectsCount, avgDefectRate, status);
@@ -47,7 +43,7 @@ public class StatsService {
             Long totalDefects = (Long) result[1];
             Long eventCount = (Long) result[2];
             
-            responses.add(new TopDefectLineResponse(lineId, totalDefects, eventCount));
+            responses.add(new TopDefectLineResponse(lineId, totalDefects, eventCount, calculateDefectsPercent(totalDefects, eventCount)));
             count++;
         }
         
