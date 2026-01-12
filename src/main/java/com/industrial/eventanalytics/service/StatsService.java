@@ -43,15 +43,14 @@ public class StatsService {
             Long totalDefects = (Long) result[1];
             Long eventCount = (Long) result[2];
             
-            responses.add(new TopDefectLineResponse(lineId, totalDefects, eventCount, calculateDefectsPercent(totalDefects, eventCount)));
+            responses.add(new TopDefectLineResponse(lineId, totalDefects, eventCount));
             count++;
         }
         
         return responses;
     }
     
-    private double calculateAvgDefectRate(long defectsCount, Instant start, Instant end) {
-        // Calculate window duration in hours
+    private static double calculateAvgDefectRate(long defectsCount, Instant start, Instant end) {
         double windowHours = ChronoUnit.SECONDS.between(start, end) / 3600.0;
         
         if (windowHours <= 0) {
